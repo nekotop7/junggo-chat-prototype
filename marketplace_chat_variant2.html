@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>Marketplace Chat Variant 2</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&amp;display=swap"
+        rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet" />
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        primary: "#2D3748", // Dark gray/slate for primary actions
+                        "background-light": "#F4F6F8",
+                        "background-dark": "#1a202c",
+                        "surface-light": "#FFFFFF",
+                        "surface-dark": "#2d3748",
+                        "text-primary-light": "#1A202C",
+                        "text-primary-dark": "#F7FAFC",
+                        "text-secondary-light": "#718096",
+                        "text-secondary-dark": "#A0AEC0",
+                        "message-sent-light": "#374151",
+                        "message-sent-dark": "#4a5568",
+                        "message-received-light": "#FFFFFF",
+                        "message-received-dark": "#2d3748",
+                    },
+                    fontFamily: {
+                        display: ["Noto Sans KR", "sans-serif"],
+                        body: ["Noto Sans KR", "sans-serif"],
+                    },
+                    borderRadius: {
+                        DEFAULT: "12px",
+                        'xl': "16px",
+                        '2xl': "20px",
+                    },
+                },
+            },
+        };
+    </script>
+    <style>
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+        }
+
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        input::placeholder,
+        input::-webkit-input-placeholder,
+        input::-moz-placeholder,
+        input:-ms-input-placeholder {
+            color: #C2C6CE !important;
+            opacity: 1 !important;
+        }
+    </style>
+    <style>
+        html {
+            background: #888;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100dvh;
+            padding: 20px 0;
+        }
+
+        body {
+            width: 360px !important;
+            height: 800px !important;
+            min-height: 800px !important;
+            max-width: 360px !important;
+            overflow: hidden;
+        }
+
+        /* 안전결제 아이콘 그라데이션 애니메이션 테두리 */
+        @keyframes gradientSpin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .safe-payment-btn {
+            position: relative;
+            width: 40px;
+            height: 40px;
+        }
+
+        .safe-payment-btn::before {
+            content: '';
+            position: absolute;
+            inset: -2px;
+            border-radius: 50%;
+            background: conic-gradient(#4CFF61 0deg,
+                    transparent 90deg,
+                    #4CFF61 180deg,
+                    transparent 270deg,
+                    #4CFF61 360deg);
+            animation: gradientSpin 2s linear infinite;
+            z-index: -1;
+        }
+
+        .safe-payment-btn::after {
+            content: '';
+            position: absolute;
+            inset: 1px;
+            border-radius: 50%;
+            background: #22c55e;
+            z-index: -1;
+        }
+    </style>
+</head>
+
+<body
+    class="bg-background-light dark:bg-background-dark text-text-primary-light dark:text-text-primary-dark flex flex-col relative shadow-2xl rounded-3xl overflow-hidden">
+    <header
+        class="bg-surface-light dark:bg-surface-dark px-4 py-3 flex items-center justify-between border-b border-gray-100 dark:border-gray-700 shrink-0 z-20">
+        <button class="p-2 -ml-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+            <span class="material-icons-round text-2xl">favorite_border</span>
+        </button>
+        <div class="flex flex-col items-center flex-1 mx-2">
+            <h1 class="text-lg font-bold truncate max-w-[200px]">배부른오리와뚱댕이는</h1>
+            <span class="text-xs text-text-secondary-light dark:text-text-secondary-dark">보통 3시간 이내 응답</span>
+        </div>
+        <div class="flex items-center space-x-1">
+            <button class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                <span class="material-icons-round text-2xl">person_add_alt</span>
+            </button>
+            <button class="p-2 -mr-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
+                <span class="material-icons-round text-2xl">more_vert</span>
+            </button>
+        </div>
+    </header>
+    <div
+        class="bg-surface-light dark:bg-surface-dark px-4 py-3 border-b border-gray-100 dark:border-gray-700 flex items-center gap-3 shrink-0 z-10">
+        <div class="relative w-12 h-12 shrink-0 rounded-lg overflow-hidden bg-gray-200 dark:bg-gray-600">
+            <img alt="iPhone 12 Mini" class="w-full h-full object-cover"
+                src="https://lh3.googleusercontent.com/aida-public/AB6AXuCX53UMrzjb4GOsHJVtJBfsca_NUMJJbYkBzRNpYbfagUCOpoMNq7dBz0jII4TDh3L249297HFB_-Sbc6y47EUnUJYsnyAO4WLuzdTee5bqrgblsvZKtpVQKmvoItW-h3OMv-PHSd9mApYjHmLIwqqv8Ko-VgzhVk2n9QWrT37VTswznCv70mV9VwrY4Z1dy64-J7LoEP7cqo28IZi-8FOpKxeaidtgXQD11UDk7KVPrADLJGvdpkFU7wArN5oOkNXtInhyxdoJeIs" />
+        </div>
+        <div class="flex-1 min-w-0">
+            <div class="flex items-baseline gap-1">
+                <span class="font-bold text-base">800,000원</span>
+                <span class="text-xs text-text-secondary-light dark:text-text-secondary-dark font-normal">배송비 별도</span>
+            </div>
+            <p class="text-sm text-text-secondary-light dark:text-text-secondary-dark truncate">애플 아이폰12미니 MINI 실버 새상품급
+            </p>
+        </div>
+        <button
+            class="px-3 py-1.5 border border-gray-300 dark:border-gray-600 rounded text-xs font-medium text-text-primary-light dark:text-text-primary-dark hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors whitespace-nowrap">
+            안심결제
+        </button>
+    </div>
+    <main class="flex-1 overflow-y-auto p-4 no-scrollbar bg-background-light dark:bg-background-dark flex flex-col">
+        <!-- 메시지가 하단부터 쌓이도록 상단 여백 자동 채움 -->
+        <div class="flex-1"></div>
+        <div id="messagesContainer" class="flex flex-col gap-4">
+        </div>
+    </main>
+    <footer
+        class="bg-surface-light dark:bg-surface-dark px-3 py-3 border-t border-gray-100 dark:border-gray-700 shrink-0 pb-6">
+        <div class="flex items-center gap-2">
+            <button
+                class="p-2 text-text-secondary-light dark:text-text-secondary-dark hover:text-primary transition-colors rounded-full hover:bg-gray-100 dark:hover:bg-gray-700">
+                <span class="material-icons-round text-2xl">add_circle_outline</span>
+            </button>
+            <div class="flex-1 bg-gray-100 dark:bg-gray-800 rounded-full px-4 py-2.5 flex items-center gap-2">
+                <input id="chatInput" class="flex-1 bg-transparent border-none focus:ring-0 text-sm p-0"
+                    style="color:#1A202C; outline:none;" placeholder="대화 해볼까요?" type="text" />
+                <button
+                    class="text-text-secondary-light dark:text-text-secondary-dark hover:text-primary transition-colors">
+                    <span class="material-icons-round text-xl">sentiment_satisfied_alt</span>
+                </button>
+            </div>
+            <button
+                class="w-10 h-10 bg-gray-300 dark:bg-gray-600 rounded-full text-white hover:bg-primary dark:hover:bg-primary transition-colors flex items-center justify-center shrink-0">
+                <span class="material-icons-round text-xl transform rotate-90">arrow_upward</span>
+            </button>
+        </div>
+    </footer>
+    <div class="fixed bottom-0 left-0 right-0 h-1 bg-transparent flex justify-center pb-2 z-50 pointer-events-none">
+        <div class="w-32 h-1 bg-gray-300 rounded-full opacity-50"></div>
+    </div>
+
+
+    <script>
+        // placeholder 색상 강제 주입
+        const styleEl = document.createElement('style');
+        styleEl.textContent = '#chatInput::placeholder { color: #C2C6CE !important; opacity: 1 !important; }';
+        document.head.appendChild(styleEl);
+
+        const chatInput = document.getElementById('chatInput');
+        const sendBtn = document.querySelector('footer button.w-10.h-10.rounded-full');
+        const chatMain = document.querySelector('main');
+        const messagesContainer = document.getElementById('messagesContainer');
+
+        // quotes.csv 로드
+        let quotes = [];
+        fetch('quotes.csv')
+            .then(r => r.text())
+            .then(text => {
+                quotes = text.trim().split('\n').slice(1).map(line => {
+                    const parts = line.split(',');
+                    // quote는 2번째, author는 3번째 (쉼표 포함 대비)
+                    const id = parts[0];
+                    const author = parts[parts.length - 1].trim();
+                    const quote = parts.slice(1, parts.length - 1).join(',').trim();
+                    return { id, quote, author };
+                }).filter(q => q.quote);
+                console.log(`명언 ${quotes.length}개 로드 완료`);
+            });
+
+        function getTime() {
+            const now = new Date();
+            const h = now.getHours();
+            const m = String(now.getMinutes()).padStart(2, '0');
+            const period = h < 12 ? '오전' : '오후';
+            const hour = h % 12 || 12;
+            return `${period} ${hour}:${m}`;
+        }
+
+        function addMyMessage(text) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'flex flex-col items-end max-w-[75%] ml-auto space-y-1';
+            wrapper.innerHTML = `
+                <div style="background:#374151; color:#fff;" class="px-4 py-3 rounded-2xl rounded-tr-none shadow-sm text-sm">
+                    ${text.replace(/</g, '&lt;').replace(/>/g, '&gt;')}
+                </div>
+                <div class="flex items-center gap-1">
+                    <span class="text-[10px]" style="color:#718096">읽음</span>
+                    <span class="text-[10px]" style="color:#718096">${getTime()}</span>
+                </div>`;
+            messagesContainer.appendChild(wrapper);
+            chatMain.scrollTop = chatMain.scrollHeight;
+        }
+
+        function addReplyMessage(q) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'flex flex-col items-start max-w-[75%] space-y-1';
+            wrapper.innerHTML = `
+                <div style="background:#fff; color:#1A202C; border:1px solid #E2E8F0;" class="px-4 py-3 rounded-2xl rounded-tl-none shadow-sm text-sm">
+                    ${q.quote}
+                    <div style="margin-top:4px; font-size:10px; color:#A0AEC0;">— ${q.author}</div>
+                </div>
+                <span style="font-size:10px; color:#718096; margin-left:4px;">${getTime()}</span>`;
+            messagesContainer.appendChild(wrapper);
+            chatMain.scrollTop = chatMain.scrollHeight;
+        }
+
+        function showTypingIndicator() {
+            const indicator = document.createElement('div');
+            indicator.id = 'typingIndicator';
+            indicator.className = 'flex flex-col items-start max-w-[75%] space-y-1';
+            indicator.innerHTML = `
+                <div style="background:#fff; border:1px solid #E2E8F0; color:#A0AEC0;" class="px-4 py-3 rounded-2xl rounded-tl-none shadow-sm text-sm">
+                    입력 중...
+                </div>`;
+            messagesContainer.appendChild(indicator);
+            chatMain.scrollTop = chatMain.scrollHeight;
+        }
+
+        function removeTypingIndicator() {
+            const el = document.getElementById('typingIndicator');
+            if (el) el.remove();
+        }
+
+        let replyTimer = null;
+        let lastSendTime = 0;
+
+        function sendMessage() {
+            const now = Date.now();
+            if (now - lastSendTime < 300) return; // 중복 호출 방지
+            lastSendTime = now;
+
+            const text = chatInput.value.trim();
+            if (!text) return;
+
+            addMyMessage(text);
+            // 한글 IME 조합 버퍼를 완전히 비우기 위해 setTimeout으로 지연 초기화
+            setTimeout(() => {
+                chatInput.value = '';
+                chatInput.blur();
+                chatInput.focus();
+            }, 0);
+
+            if (quotes.length === 0) return;
+
+            // 이미 대기 중인 타이머 있으면 리셋 (연속 전송 시 답변은 1개만)
+            if (replyTimer) {
+                clearTimeout(replyTimer);
+                removeTypingIndicator();
+            }
+
+            showTypingIndicator();
+            replyTimer = setTimeout(() => {
+                removeTypingIndicator();
+                const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+                addReplyMessage(randomQuote);
+                replyTimer = null;
+            }, 800 + Math.random() * 1200);
+        }
+
+        sendBtn.addEventListener('click', sendMessage);
+        chatInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+        });
+    </script>
+
+    <!-- 플로팅 버튼: body(relative+overflow:hidden) 기준 absolute → 폰 프레임 안에 고정 -->
+    <button aria-label="Safe Payment Info"
+        class="safe-payment-btn w-10 h-10 bg-green-500 rounded-full shadow-lg flex items-center justify-center hover:bg-green-600 transition-transform active:scale-95 text-white"
+        style="position: absolute; right: 16px; top: 122px; z-index: 50;">
+        <span class="material-icons-round text-xl">verified_user</span>
+    </button>
+</body>
+
+
+</html>
