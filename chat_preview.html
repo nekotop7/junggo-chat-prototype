@@ -6,7 +6,8 @@
   <meta name="viewport"
     content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>중고나라 채팅 - TK_채팅_00_첫진입</title>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
+    rel="stylesheet">
   <style>
     * {
       margin: 0;
@@ -23,7 +24,7 @@
 
     body {
       background: #fff;
-      font-family: 'Noto Sans KR', -apple-system, 'Apple SD Gothic Neo', sans-serif;
+      font-family: 'Pretendard', -apple-system, sans-serif;
       display: flex;
       justify-content: center;
       align-items: stretch
@@ -430,7 +431,14 @@
       border-radius: 25px;
       display: flex;
       align-items: center;
-      padding: 0 8px 0 16px
+      padding: 0 8px 0 16px;
+      border: 1.5px solid transparent;
+      transition: border-color 0.2s, background-color 0.2s;
+    }
+
+    .inputwrap:focus-within {
+      background: #fff;
+      border-color: #2C82FF;
     }
 
     .inputbox {
@@ -462,18 +470,20 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: opacity .15s;
+      transition: opacity .15s, transform 0.1s;
       flex-shrink: 0;
       background: #009F1F;
-      opacity: 0.3
+      opacity: 0.3;
+      pointer-events: none;
     }
 
     .sendbtn.active {
-      opacity: 1
+      opacity: 1;
+      pointer-events: auto;
     }
 
-    .sendbtn.active:active {
-      opacity: .85
+    .sendbtn:active {
+      transform: scale(0.92);
     }
 
     /* ─── 하단 네비 ─── */
@@ -576,9 +586,9 @@
         <div class="center-area">
           <div class="name-row">
             <span class="name">배부른오리와둥댕이는</span>
-            <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-              <circle cx="8" cy="8" r="7" stroke="#141313" stroke-width="1.2" />
-              <polyline points="8,4 8,8.5 11,10" fill="none" stroke="#141313" stroke-width="1.2" stroke-linecap="round"
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+              <circle cx="12" cy="12" r="10" stroke="#141313" stroke-width="1.8" />
+              <path d="M8 10l4 4 4-4" stroke="#141313" stroke-width="1.8" stroke-linecap="round"
                 stroke-linejoin="round" />
             </svg>
           </div>
@@ -697,35 +707,44 @@
   </div>
 
   <script>
-const inp=document.getElementById('inp'),sBtn=document.getElementById('sBtn'),ml=document.getElementById('msgList'),ca=document.getElementById('chatArea');
+    const inp = document.getElementById('inp'), sBtn = document.getElementById('sBtn'), ml = document.getElementById('msgList'), ca = document.getElementById('chatArea');
 
-function onI(e){
-  const hasText=e.value.trim().length>0;
-  if(hasText){sBtn.classList.add('active')}else{sBtn.classList.remove('active')}
-}
+    function onI(e) {
+      const hasText = e.value.trim().length > 0;
+      if (hasText) {
+        sBtn.classList.add('active');
+      } else {
+        sBtn.classList.remove('active');
+      }
+      // Auto-resize height if needed (optional but good for UX)
+    }
 
-function doS(){
-  const t=inp.value.trim();
-  if(!t)return;
-  add(t,'s');
-  inp.value='';
-  sBtn.classList.remove('active');
-  setTimeout(()=>add('안녕하세요 😊 해당 상품 관련하여 문의해 주셨군요!','r'),900);
-}
+    function doS() {
+      const t = inp.value.trim();
+      if (!t) return;
+      add(t, 's');
+      inp.value = '';
+      sBtn.classList.remove('active');
+      ca.scrollTop = ca.scrollHeight;
+      setTimeout(() => add('안녕하세요 😊 해당 상품 관련하여 문의해 주셨군요!', 'r'), 900);
+    }
 
-function sendQ(e){
-  add(e.textContent,'s');
-  setTimeout(()=>add('안녕하세요 😊 해당 상품 관련하여 문의해 주셨군요!','r'),900);
-}
+    // 퀵 칩 클릭 시: 바로 전송하지 않고 입력창에 기입
+    function sendQ(e) {
+      const text = e.textContent.replace('📦 ', '').trim();
+      inp.value = text;
+      inp.focus();
+      onI(inp); // 버튼 활성화 상태 업데이트
+    }
 
-function add(t,c){
-  const w=document.createElement('div');w.className='bw '+c;
-  const b=document.createElement('div');b.className='bb '+c;
-  b.textContent=t;w.appendChild(b);ml.appendChild(w);
-  ca.scrollTop=ca.scrollHeight;
-}
+    function add(t, c) {
+      const w = document.createElement('div'); w.className = 'bw ' + c;
+      const b = document.createElement('div'); b.className = 'bb ' + c;
+      b.textContent = t; w.appendChild(b); ml.appendChild(w);
+      setTimeout(() => { ca.scrollTop = ca.scrollHeight; }, 50);
+    }
 
-inp.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();doS()}});
+    inp.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); doS() } });
   </script>
 </body>
 
