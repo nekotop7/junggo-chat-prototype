@@ -267,10 +267,15 @@
       flex-shrink: 0;
       overflow: hidden;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
     }
 
-    /* 축소된 상태 (Scroll-Shrink) */
+    /* 펼쳤을때 배너 하단 둥글게 제거 (하나의 컨테이너로 보이기 위해) */
+    .banner.expanded {
+      border-radius: 8px 8px 0 0;
+      border-bottom: none;
+    }
+
+    /* 축소된 상태 (Scroll-Shrink) - Figma 02 기준 */
     .banner.shrunk {
       width: 36px;
       height: 36px;
@@ -278,10 +283,10 @@
       margin-left: auto;
       margin-right: 16px;
       border-radius: 50%;
-      background: #009F1F;
-      border: none;
+      background: #E4F8E8;
+      border: 1px solid #CBE8D1;
       justify-content: center;
-      box-shadow: 0 4px 12px rgba(0, 159, 31, 0.3);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     }
 
     .banner.shrunk .txt,
@@ -295,10 +300,16 @@
       height: 20px;
     }
 
-    .banner.shrunk .dot svg {
-      width: 14px;
-      height: 14px;
-      stroke-width: 3;
+    .banner.shrunk .dot .icon-default {
+      display: none;
+    }
+
+    .banner.shrunk .dot .icon-shrunk {
+      display: block;
+    }
+
+    .banner .dot .icon-shrunk {
+      display: none;
     }
 
     .banner .dot {
@@ -334,13 +345,47 @@
       cursor: pointer;
       flex-shrink: 0;
       display: flex;
-      align-items: center
+      align-items: center;
+      transition: transform 0.3s;
+    }
+
+    .banner .chevron.flipped {
+      transform: rotate(180deg);
+    }
+
+    /* ─── 공지 펼침 (Figma 03) ─── */
+    .banner-expanded {
+      margin: 0 10px 0;
+      background: #E4F8E8;
+      border: 1px solid #CBE8D1;
+      border-top: none;
+      border-radius: 0 0 8px 8px;
+      padding: 10px 16px;
+      z-index: 9;
+      flex-shrink: 0;
+    }
+
+    .expanded-chips {
+      display: flex;
+      gap: 8px;
+    }
+
+    .exp-chip {
+      background: #fff;
+      border: 1px solid #CBE8D1;
+      border-radius: 40px;
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: 500;
+      color: #141313;
+      cursor: pointer;
+      white-space: nowrap;
     }
 
     /* ─── 채팅 영역 ─── */
     .chatarea {
       flex: 1;
-      background: #fff;
+      background: transparent;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
@@ -614,7 +659,7 @@
     <!-- topbar -->
     <div class="topbar">
       <div class="topbar-inner">
-        <div class="left-area">
+        <div class="left-area" onclick="resetAll()" style="cursor:pointer;">
           <svg width="10" height="18" viewBox="0 0 10 18" fill="none">
             <path d="M9 1L1 9l8 8" stroke="#141313" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
@@ -658,13 +703,24 @@
     <!-- 안심결제 배너 -->
     <div class="banner" id="trustBanner">
       <div class="dot">
-        <img src="img/conerstone.svg" alt="안심결제" style="width:100%;height:100%;object-fit:contain;">
+        <img src="img/conerstone.svg" alt="안심결제" class="icon-default"
+          style="width:100%;height:100%;object-fit:contain;">
+        <img src="img/conerstone_g.svg" alt="안심결제" class="icon-shrunk"
+          style="width:100%;height:100%;object-fit:contain;">
       </div>
       <div class="txt"><span class="g">안심결제</span> <span class="d">쓰고 사기 걱정 없는 중고거래를 권장합니다.</span></div>
-      <div class="chevron" onclick="document.getElementById('trustBanner').style.display='none'">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <div class="chevron" id="bannerChevron" onclick="toggleBanner(event)">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" id="chevronIcon">
           <path d="M4 6l4 4 4-4" stroke="#009F1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
         </svg>
+      </div>
+    </div>
+
+    <!-- 공지 펼침 영역 (Figma 03) -->
+    <div class="banner-expanded" id="bannerExpanded" style="display:none;">
+      <div class="expanded-chips">
+        <div class="exp-chip">안심결제란?</div>
+        <div class="exp-chip">🚨 사기예방팁</div>
       </div>
     </div>
 
@@ -674,7 +730,7 @@
     </div>
 
     <!-- 퀵 제안 칩 -->
-    <div class="qchips">
+    <div class="qchips" id="quickChips">
       <div class="qc" onclick="sendQ(this)">안녕하세요</div>
       <div class="qc" onclick="sendQ(this)">📦 이 상품 관련 문의 드립니다</div>
       <div class="qc" onclick="sendQ(this)">지금 거래 되나요?</div>
@@ -749,21 +805,29 @@
       // Auto-resize height if needed (optional but good for UX)
     }
 
+    let isSending = false;
     function doS() {
+      if (isSending) return;
       const t = inp.value.trim();
       if (!t) return;
+      isSending = true;
       add(t, 's');
       inp.value = '';
       sBtn.classList.remove('active');
       ca.scrollTop = ca.scrollHeight;
-      setTimeout(() => add('안녕하세요 😊 해당 상품 관련하여 문의해 주셨군요!', 'r'), 900);
+      setTimeout(() => {
+        add('안녕하세요 😊 해당 상품 관련하여 문의해 주셨군요!', 'r');
+        isSending = false;
+      }, 900);
     }
 
-    // 퀵 칩 클릭 시: 바로 채팅 메시지로 전송
+    // 퀵 칩 클릭 시: 바로 채팅 메시지로 전송 + 퀵칩 숨김 (최초 1회)
     function sendQ(e) {
       const text = e.textContent.replace('📦 ', '').trim();
       add(text, 's');
       ca.scrollTop = ca.scrollHeight;
+      // 퀵메시지 영역 숨김 (최초 1회 사용 후 사라짐)
+      document.getElementById('quickChips').style.display = 'none';
       setTimeout(() => add('안녕하세요 😊 해당 상품 관련하여 문의해 주셨군요!', 'r'), 900);
     }
 
@@ -774,14 +838,55 @@
       setTimeout(() => { ca.scrollTop = ca.scrollHeight; }, 50);
     }
 
+    // 배너 펼침/접힘 토글 (Figma 03)
+    let bannerOpen = false;
+    function toggleBanner(e) {
+      e.stopPropagation();
+      bannerOpen = !bannerOpen;
+      const expanded = document.getElementById('bannerExpanded');
+      const chevron = document.getElementById('bannerChevron');
+      const banner = document.getElementById('trustBanner');
+      expanded.style.display = bannerOpen ? 'block' : 'none';
+      if (bannerOpen) {
+        chevron.classList.add('flipped');
+        banner.classList.add('expanded');
+      } else {
+        chevron.classList.remove('flipped');
+        banner.classList.remove('expanded');
+      }
+    }
+
+    // 배너가 한번 축소되면 뒤로가기 누를 때까지 축소 유지
+    let bannerShrunk = false;
     ca.addEventListener('scroll', () => {
       const banner = document.getElementById('trustBanner');
-      if (ca.scrollTop > 30) {
+      const expanded = document.getElementById('bannerExpanded');
+      const chevron = document.getElementById('bannerChevron');
+      if (!bannerShrunk && ca.scrollTop > 30) {
+        bannerShrunk = true;
         banner.classList.add('shrunk');
-      } else {
-        banner.classList.remove('shrunk');
+        banner.classList.remove('expanded');
+        expanded.style.display = 'none';
+        chevron.classList.remove('flipped');
+        bannerOpen = false;
       }
     });
+
+    // 뒤로가기 초기화
+    function resetAll() {
+      ml.innerHTML = '';
+      ca.scrollTop = 0;
+      inp.value = '';
+      sBtn.classList.remove('active');
+      isSending = false;
+      bannerShrunk = false;
+      document.getElementById('quickChips').style.display = 'flex';
+      document.getElementById('trustBanner').classList.remove('shrunk', 'expanded');
+      document.getElementById('trustBanner').style.display = '';
+      document.getElementById('bannerExpanded').style.display = 'none';
+      document.getElementById('bannerChevron').classList.remove('flipped');
+      bannerOpen = false;
+    }
 
     inp.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); doS() } });
   </script>
