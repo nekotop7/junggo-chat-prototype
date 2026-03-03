@@ -643,10 +643,7 @@
     <!-- 상품 정보 바 -->
     <div class="productbar">
       <div class="thumb">
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="#AAA">
-          <path
-            d="M21 19V5c0-1.1-.9-2-2-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2zM8.5 13.5l2.5 3.01L14.5 12l4.5 6H5l3.5-4.5z" />
-        </svg>
+        <img src="img/Product_img.png" alt="상품 이미지" style="width:100%;height:100%;object-fit:cover;">
       </div>
       <div class="pinfo">
         <div class="pname">애플 아이폰12미니 MINI 실버 새상...</div>
@@ -661,10 +658,7 @@
     <!-- 안심결제 배너 -->
     <div class="banner" id="trustBanner">
       <div class="dot">
-        <svg width="10" height="10" viewBox="0 0 12 12" fill="none" stroke="#fff" stroke-width="2"
-          stroke-linecap="round" stroke-linejoin="round">
-          <polyline points="2.5 6 5 8.5 9.5 3.5" />
-        </svg>
+        <img src="img/conerstone.svg" alt="안심결제" style="width:100%;height:100%;object-fit:contain;">
       </div>
       <div class="txt"><span class="g">안심결제</span> <span class="d">쓰고 사기 걱정 없는 중고거래를 권장합니다.</span></div>
       <div class="chevron" onclick="document.getElementById('trustBanner').style.display='none'">
@@ -765,12 +759,12 @@
       setTimeout(() => add('안녕하세요 😊 해당 상품 관련하여 문의해 주셨군요!', 'r'), 900);
     }
 
-    // 퀵 칩 클릭 시: 바로 전송하지 않고 입력창에 기입
+    // 퀵 칩 클릭 시: 바로 채팅 메시지로 전송
     function sendQ(e) {
       const text = e.textContent.replace('📦 ', '').trim();
-      inp.value = text;
-      inp.focus();
-      onI(inp); // 버튼 활성화 상태 업데이트
+      add(text, 's');
+      ca.scrollTop = ca.scrollHeight;
+      setTimeout(() => add('안녕하세요 😊 해당 상품 관련하여 문의해 주셨군요!', 'r'), 900);
     }
 
     function add(t, c) {
