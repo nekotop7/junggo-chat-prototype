@@ -101,7 +101,9 @@
       align-items: center;
       padding: 8px 12px;
       flex-shrink: 0;
-      gap: 8px
+      gap: 8px;
+      position: relative;
+      z-index: 110;
     }
 
     .topbar-inner {
@@ -519,7 +521,7 @@
 
     .inputwrap:focus-within {
       background: #fff;
-      border-color: #2C82FF;
+      border-color: #009F1F;
     }
 
     .inputbox {
@@ -631,6 +633,482 @@
         transform: none
       }
     }
+
+    /* ─── 기능 트레이 (바텀시트) ─── */
+    .feature-tray {
+      background: #fff;
+      padding: 20px 16px 16px;
+      display: none;
+      justify-content: space-around;
+      align-items: flex-start;
+      flex-shrink: 0;
+      animation: traySlideUp .25s ease;
+    }
+
+    .feature-tray.open {
+      display: flex;
+    }
+
+    @keyframes traySlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(12px);
+      }
+
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    .feature-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    .feature-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform .15s;
+    }
+
+    .feature-item:active .feature-icon {
+      transform: scale(0.92);
+    }
+
+    .feature-icon.green {
+      background: #E8F5E9;
+    }
+
+    .feature-icon.blue {
+      background: #E3F2FD;
+    }
+
+    .feature-icon.sky {
+      background: #E0F7FA;
+    }
+
+    .feature-icon.gray {
+      background: #F1F4F6;
+    }
+
+    .feature-label {
+      font-size: 11px;
+      font-weight: 500;
+      color: #59616B;
+      white-space: nowrap;
+    }
+
+    /* + 버튼 → X 전환 */
+    .plus-toggle {
+      transition: transform .3s ease;
+    }
+
+    .plus-toggle.rotated {
+      animation: spinToX .4s ease forwards;
+    }
+
+    .plus-toggle.unrotated {
+      animation: spinToPlus .4s ease forwards;
+    }
+
+    @keyframes spinToX {
+      from {
+        transform: rotate(0deg);
+      }
+
+      to {
+        transform: rotate(405deg);
+      }
+    }
+
+    @keyframes spinToPlus {
+      from {
+        transform: rotate(405deg);
+      }
+
+      to {
+        transform: rotate(0deg);
+      }
+    }
+
+    /* ─── 프로필 반레이어 ─── */
+    .profile-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 105;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity .3s ease;
+    }
+
+    .profile-overlay.open {
+      pointer-events: auto;
+      opacity: 1;
+    }
+
+    .profile-dim {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.55);
+    }
+
+    .profile-card {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: #fff;
+      border-radius: 0 0 16px 16px;
+      padding: 0 0 24px;
+      transform: translateY(-100%);
+      transition: transform .35s cubic-bezier(0.22, 0.61, 0.36, 1);
+      z-index: 106;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    }
+
+    .profile-overlay.open .profile-card {
+      transform: translateY(0);
+    }
+
+    .profile-body {
+      display: flex;
+      align-items: flex-start;
+      padding: 16px 20px 0;
+      gap: 16px;
+    }
+
+    .profile-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .profile-nickname {
+      font-size: 18px;
+      font-weight: 700;
+      color: #141313;
+      letter-spacing: -.3px;
+      margin-bottom: 4px;
+    }
+
+    .profile-meta {
+      font-size: 12px;
+      font-weight: 400;
+      color: #9CA3AF;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .profile-meta .dot-sep {
+      color: #D1D5DB;
+    }
+
+    .profile-avatar {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      background: #E0E0E0;
+      flex-shrink: 0;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .profile-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .profile-trust {
+      padding: 12px 20px 0;
+    }
+
+    .profile-trust-label {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 6px;
+    }
+
+    .profile-trust-label .label-text {
+      font-size: 13px;
+      font-weight: 600;
+      color: #009F1F;
+    }
+
+    .profile-trust-label .label-score {
+      font-size: 13px;
+      font-weight: 700;
+      color: #141313;
+    }
+
+    .profile-trust-bar {
+      width: 100%;
+      height: 6px;
+      background: #F1F4F6;
+      border-radius: 3px;
+      overflow: hidden;
+    }
+
+    .profile-trust-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #009F1F, #4ADE80);
+      border-radius: 3px;
+      transition: width .6s ease;
+    }
+
+    .profile-stats {
+      display: flex;
+      margin: 16px 20px 0;
+      border: 1px solid #F1F4F6;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .profile-stat {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 14px 0;
+      gap: 4px;
+    }
+
+    .profile-stat+.profile-stat {
+      border-left: 1px solid #F1F4F6;
+    }
+
+    .profile-stat .stat-label {
+      font-size: 11px;
+      font-weight: 500;
+      color: #9CA3AF;
+    }
+
+    .profile-stat .stat-value {
+      font-size: 16px;
+      font-weight: 700;
+      color: #141313;
+    }
+
+    /* ─── 안심결제란 바텀시트 ─── */
+    .trust-sheet-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 200;
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity .3s ease;
+    }
+
+    .trust-sheet-overlay.open {
+      pointer-events: auto;
+      opacity: 1;
+    }
+
+    .trust-sheet-dim {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.55);
+    }
+
+    .trust-sheet {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #fff;
+      border-radius: 16px 16px 0 0;
+      padding: 0 0 env(safe-area-inset-bottom, 0px);
+      transform: translateY(100%);
+      transition: transform .35s cubic-bezier(0.22, 0.61, 0.36, 1);
+      z-index: 201;
+      box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.12);
+      max-height: 85vh;
+      overflow-y: auto;
+    }
+
+    .trust-sheet-overlay.open .trust-sheet {
+      transform: translateY(0);
+    }
+
+    .trust-sheet-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 16px 12px;
+      border-bottom: 1px solid #F1F4F6;
+      position: sticky;
+      top: 0;
+      background: #fff;
+      border-radius: 16px 16px 0 0;
+    }
+
+    .trust-sheet-title {
+      flex: 1;
+      text-align: center;
+      font-size: 16px;
+      font-weight: 700;
+      color: #141313;
+    }
+
+    .trust-sheet-close {
+      width: 36px;
+      height: 36px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      border: none;
+      background: none;
+      border-radius: 50%;
+      transition: background .15s;
+    }
+
+    .trust-sheet-close:active {
+      background: #F1F4F6;
+    }
+
+    .trust-sheet-body {
+      padding: 24px 20px 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .trust-sheet-illust {
+      width: 100%;
+      height: 180px;
+      background: #F1F4F6;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .trust-sheet-illust svg {
+      opacity: 0.4;
+    }
+
+    .trust-sheet-text {
+      text-align: center;
+    }
+
+    .trust-sheet-text .main-text {
+      font-size: 18px;
+      font-weight: 700;
+      color: #141313;
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+
+    .trust-sheet-text .sub-text {
+      font-size: 13px;
+      font-weight: 400;
+      color: #59616B;
+      line-height: 1.6;
+    }
+
+    /* ─── 사기예방팁 메시지 카드 ─── */
+    .scam-tip-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 8px 16px;
+    }
+
+    .scam-tip-card {
+      background: #FFFFFF;
+      border: 1px solid #E8E8E8;
+      border-radius: 0 16px 16px 16px;
+      padding: 16px 18px;
+      max-width: 85%;
+    }
+
+    .scam-tip-card .tip-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
+
+    .scam-tip-card .tip-header .tip-icon {
+      width: 22px;
+      height: 22px;
+      background: #009F1F;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .scam-tip-card .tip-header .tip-icon svg {
+      width: 12px;
+      height: 12px;
+    }
+
+    .scam-tip-card .tip-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #191F28;
+    }
+
+    .scam-tip-card .tip-body {
+      font-size: 14px;
+      color: #4E5968;
+      line-height: 1.65;
+      margin-bottom: 16px;
+    }
+
+    .scam-tip-card .tip-body strong {
+      font-weight: 700;
+      color: #191F28;
+    }
+
+    .scam-tip-card .tip-conditions {
+      font-size: 13px;
+      color: #6B7684;
+      line-height: 1.75;
+    }
+
+    .scam-tip-card .tip-conditions .cond-title {
+      font-weight: 700;
+      font-size: 13px;
+      color: #333D4B;
+      margin-bottom: 4px;
+    }
+
+    .scam-tip-footer {
+      font-size: 12px;
+      color: #8B95A1;
+      margin-top: 6px;
+      padding-left: 2px;
+    }
   </style>
 </head>
 
@@ -664,7 +1142,7 @@
             <path d="M9 1L1 9l8 8" stroke="#141313" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
           </svg>
         </div>
-        <div class="center-area">
+        <div class="center-area" onclick="toggleProfileOverlay()" style="cursor:pointer;">
           <div class="name-row">
             <span class="name">배부른오리와둥댕이는</span>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -685,86 +1163,202 @@
       </div>
     </div>
 
-    <!-- 상품 정보 바 -->
-    <div class="productbar">
-      <div class="thumb">
-        <img src="img/Product_img.png" alt="상품 이미지" style="width:100%;height:100%;object-fit:cover;">
-      </div>
-      <div class="pinfo">
-        <div class="pname">애플 아이폰12미니 MINI 실버 새상...</div>
-        <div class="price-row">
-          <span class="price">880,000원</span>
-          <span class="ship-badge">무료배송</span>
+    <!-- topbar 아래 콘텐츠 (프로필 오버레이 포함) -->
+    <div style="position:relative;flex:1;display:flex;flex-direction:column;overflow:hidden;">
+
+      <!-- 프로필 반레이어 -->
+      <div class="profile-overlay" id="profileOverlay">
+        <div class="profile-dim" onclick="toggleProfileOverlay()"></div>
+        <div class="profile-card">
+          <div class="profile-body">
+            <div class="profile-info">
+              <div class="profile-nickname">배부른오리와둥댕이는</div>
+              <div class="profile-meta">
+                <span>응답률 98%</span>
+                <span class="dot-sep">·</span>
+                <span>보통 10분 이내 응답</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="2"
+                  stroke-linecap="round">
+                  <circle cx="12" cy="12" r="10" />
+                  <line x1="12" y1="16" x2="12" y2="12" />
+                  <line x1="12" y1="8" x2="12.01" y2="8" />
+                </svg>
+              </div>
+            </div>
+            <div class="profile-avatar">
+              <svg width="32" height="32" viewBox="0 0 24 24" fill="#BDBDBD">
+                <path
+                  d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+              </svg>
+            </div>
+          </div>
+          <div class="profile-trust">
+            <div class="profile-trust-label">
+              <span class="label-text">신뢰지수</span>
+              <span class="label-score">480</span>
+              <span style="font-size:12px;color:#9CA3AF;margin-left:auto;">1,000</span>
+            </div>
+            <div class="profile-trust-bar">
+              <div class="profile-trust-fill" style="width:48%;"></div>
+            </div>
+          </div>
+          <div class="profile-stats">
+            <div class="profile-stat">
+              <span class="stat-label">안전거래</span>
+              <span class="stat-value">256</span>
+            </div>
+            <div class="profile-stat">
+              <span class="stat-label">거래후기</span>
+              <span class="stat-value">999+</span>
+            </div>
+            <div class="profile-stat">
+              <span class="stat-label">단골</span>
+              <span class="stat-value">164</span>
+            </div>
+          </div>
         </div>
       </div>
-      <button class="buybtn">구매하기</button>
-    </div>
 
-    <!-- 안심결제 배너 -->
-    <div class="banner" id="trustBanner">
-      <div class="dot">
-        <img src="img/conerstone.svg" alt="안심결제" class="icon-default"
-          style="width:100%;height:100%;object-fit:contain;">
-        <img src="img/conerstone_g.svg" alt="안심결제" class="icon-shrunk"
-          style="width:100%;height:100%;object-fit:contain;">
+      <!-- 상품 정보 바 -->
+      <div class="productbar">
+        <div class="thumb">
+          <img src="img/Product_img.png" alt="상품 이미지" style="width:100%;height:100%;object-fit:cover;">
+        </div>
+        <div class="pinfo">
+          <div class="pname">애플 아이폰12미니 MINI 실버 새상...</div>
+          <div class="price-row">
+            <span class="price">880,000원</span>
+            <span class="ship-badge">무료배송</span>
+          </div>
+        </div>
+        <button class="buybtn">구매하기</button>
       </div>
-      <div class="txt"><span class="g">안심결제</span> <span class="d">쓰고 사기 걱정 없는 중고거래를 권장합니다.</span></div>
-      <div class="chevron" id="bannerChevron" onclick="toggleBanner(event)">
-        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" id="chevronIcon">
-          <path d="M4 6l4 4 4-4" stroke="#009F1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-        </svg>
+
+      <!-- 안심결제 배너 -->
+      <div class="banner" id="trustBanner">
+        <div class="dot">
+          <img src="img/conerstone.svg" alt="안심결제" class="icon-default"
+            style="width:100%;height:100%;object-fit:contain;">
+          <img src="img/conerstone_g.svg" alt="안심결제" class="icon-shrunk"
+            style="width:100%;height:100%;object-fit:contain;">
+        </div>
+        <div class="txt"><span class="g">안심결제</span> <span class="d">쓰고 사기 걱정 없는 중고거래를 권장합니다.</span></div>
+        <div class="chevron" id="bannerChevron" onclick="toggleBanner(event)">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" id="chevronIcon">
+            <path d="M4 6l4 4 4-4" stroke="#009F1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        </div>
       </div>
-    </div>
 
-    <!-- 공지 펼침 영역 (Figma 03) -->
-    <div class="banner-expanded" id="bannerExpanded" style="display:none;">
-      <div class="expanded-chips">
-        <div class="exp-chip">안심결제란?</div>
-        <div class="exp-chip">🚨 사기예방팁</div>
+      <!-- 공지 펼침 영역 (Figma 03) -->
+      <div class="banner-expanded" id="bannerExpanded" style="display:none;">
+        <div class="expanded-chips">
+          <div class="exp-chip" onclick="openTrustSheet()">안심결제란?</div>
+          <div class="exp-chip" onclick="sendScamTip()">🚨 사기예방팁</div>
+        </div>
       </div>
-    </div>
 
-    <!-- 채팅 영역 -->
-    <div class="chatarea" id="chatArea">
-      <div class="msglist" id="msgList"></div>
-    </div>
-
-    <!-- 퀵 제안 칩 -->
-    <div class="qchips" id="quickChips">
-      <div class="qc" onclick="sendQ(this)">안녕하세요</div>
-      <div class="qc" onclick="sendQ(this)">📦 이 상품 관련 문의 드립니다</div>
-      <div class="qc" onclick="sendQ(this)">지금 거래 되나요?</div>
-    </div>
-
-    <!-- 입력창 -->
-    <div class="inputarea">
-      <div class="toucharea">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="1.5"
-          stroke-linecap="round">
-          <circle cx="12" cy="12" r="10" />
-          <line x1="12" y1="7" x2="12" y2="17" />
-          <line x1="7" y1="12" x2="17" y2="12" />
-        </svg>
+      <!-- 채팅 영역 -->
+      <div class="chatarea" id="chatArea">
+        <div class="msglist" id="msgList"></div>
       </div>
-      <div class="inputwrap">
-        <textarea class="inputbox" id="inp" rows="1" placeholder="대화를 해볼까요?" oninput="onI(this)"></textarea>
-        <div class="toucharea" style="width:28px;height:28px">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="1.5"
-            stroke-linecap="round">
+
+      <!-- 퀵 제안 칩 -->
+      <div class="qchips" id="quickChips">
+        <div class="qc" onclick="sendQ(this)">안녕하세요</div>
+        <div class="qc" onclick="sendQ(this)">📦 이 상품 관련 문의 드립니다</div>
+        <div class="qc" onclick="sendQ(this)">지금 거래 되나요?</div>
+      </div>
+
+      <!-- 입력창 -->
+      <div class="inputarea">
+        <div class="toucharea" onclick="toggleFeatureTray()">
+          <svg class="plus-toggle" id="plusIcon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF"
+            stroke-width="1.5" stroke-linecap="round">
             <circle cx="12" cy="12" r="10" />
-            <path d="M8 14s1.5 2 4 2 4-2 4-2" />
-            <circle cx="9" cy="9" r=".8" fill="#9CA3AF" stroke="none" />
-            <circle cx="15" cy="9" r=".8" fill="#9CA3AF" stroke="none" />
+            <line x1="12" y1="7" x2="12" y2="17" />
+            <line x1="7" y1="12" x2="17" y2="12" />
           </svg>
         </div>
+        <div class="inputwrap">
+          <textarea class="inputbox" id="inp" rows="1" placeholder="대화를 해볼까요?" oninput="onI(this)"></textarea>
+          <div class="toucharea" style="width:28px;height:28px">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" stroke-width="1.5"
+              stroke-linecap="round">
+              <circle cx="12" cy="12" r="10" />
+              <path d="M8 14s1.5 2 4 2 4-2 4-2" />
+              <circle cx="9" cy="9" r=".8" fill="#9CA3AF" stroke="none" />
+              <circle cx="15" cy="9" r=".8" fill="#9CA3AF" stroke="none" />
+            </svg>
+          </div>
+        </div>
+        <div class="toucharea">
+          <button class="sendbtn" id="sBtn" onclick="doS()">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+              <path d="M7 12V2M3 6l4-4 4 4" stroke="#fff" stroke-width="2" stroke-linecap="round"
+                stroke-linejoin="round" />
+            </svg>
+          </button>
+        </div>
       </div>
-      <div class="toucharea">
-        <button class="sendbtn" id="sBtn" onclick="doS()">
-          <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-            <path d="M7 12V2M3 6l4-4 4 4" stroke="#fff" stroke-width="2" stroke-linecap="round"
-              stroke-linejoin="round" />
-          </svg>
-        </button>
+
+      <!-- 기능 트레이 (바텀시트) -->
+      <div class="feature-tray" id="featureTray">
+        <div class="feature-item">
+          <div class="feature-icon">
+            <img src="img/Overlay1.svg" alt="사진/동영상" style="width:60px;height:60px;">
+          </div>
+          <span class="feature-label">사진/동영상</span>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">
+            <img src="img/Overlay2.svg" alt="계좌전송" style="width:60px;height:60px;">
+          </div>
+          <span class="feature-label">계좌전송</span>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">
+            <img src="img/Overlay3.svg" alt="배송지전송" style="width:60px;height:60px;">
+          </div>
+          <span class="feature-label">배송지전송</span>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">
+            <img src="img/Overlay4.svg" alt="상품선택" style="width:60px;height:60px;">
+          </div>
+          <span class="feature-label">상품선택</span>
+        </div>
+      </div>
+
+    </div><!-- /topbar 아래 콘텐츠 wrapper -->
+
+    <!-- 안심결제란 바텀시트 (전체 화면 딜드) -->
+    <div class="trust-sheet-overlay" id="trustSheetOverlay">
+      <div class="trust-sheet-dim" onclick="closeTrustSheet()"></div>
+      <div class="trust-sheet">
+        <div class="trust-sheet-header">
+          <div style="width:36px;"></div>
+          <span class="trust-sheet-title">안심결제란?</span>
+          <button class="trust-sheet-close" onclick="closeTrustSheet()">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#141313" stroke-width="2"
+              stroke-linecap="round">
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
+            </svg>
+          </button>
+        </div>
+        <div class="trust-sheet-body">
+          <div class="trust-sheet-illust">
+            <svg width="64" height="64" viewBox="0 0 24 24" fill="#BDBDBD">
+              <path
+                d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z" />
+            </svg>
+          </div>
+          <div class="trust-sheet-text">
+            <div class="main-text">중고나라 채팅, 안심결제가<br>가장 안전합니다!</div>
+            <div class="sub-text">카카오톡이나 라인 등으로 대화를 유도하거나<br>URL(링크)결제 유도 및 직접송금을 요구하는 경우<br>피해 위험이 있으니 주의하세요!</div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -872,6 +1466,78 @@
       }
     });
 
+    // 기능 트레이 토글
+    let featureTrayOpen = false;
+    function toggleFeatureTray() {
+      featureTrayOpen = !featureTrayOpen;
+      const tray = document.getElementById('featureTray');
+      const icon = document.getElementById('plusIcon');
+      const chips = document.getElementById('quickChips');
+      if (featureTrayOpen) {
+        tray.classList.add('open');
+        icon.classList.remove('unrotated');
+        icon.classList.add('rotated');
+      } else {
+        tray.classList.remove('open');
+        icon.classList.remove('rotated');
+        icon.classList.add('unrotated');
+        // 퀵칩은 이미 사용한 상태가 아닐 때만 복원
+        if (!document.querySelector('.bw')) {
+          chips.style.display = 'flex';
+        }
+      }
+    }
+
+    // 프로필 반레이어 토글
+    let profileOpen = false;
+    function toggleProfileOverlay() {
+      profileOpen = !profileOpen;
+      const overlay = document.getElementById('profileOverlay');
+      if (profileOpen) {
+        overlay.classList.add('open');
+      } else {
+        overlay.classList.remove('open');
+      }
+    }
+
+    // 안심결제란 바텀시트
+    function openTrustSheet() {
+      document.getElementById('trustSheetOverlay').classList.add('open');
+    }
+    function closeTrustSheet() {
+      document.getElementById('trustSheetOverlay').classList.remove('open');
+    }
+
+    // 사기예방팁 메시지 카드 삽입
+    function sendScamTip() {
+      const now = new Date();
+      const timeStr = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
+
+      const cardHTML = `
+        <div class="scam-tip-wrap">
+          <div class="scam-tip-card">
+            <div class="tip-header">
+              <div class="tip-icon">
+                <svg viewBox="0 0 24 24" fill="#fff"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
+              </div>
+              <span class="tip-title">안심결제란?</span>
+            </div>
+            <div class="tip-body">중고나라 안심결제로 거래 후 사기 피해 발생 시<br><strong>최대 100만원</strong>까지 보상해 드립니다.</div>
+            <div class="tip-conditions">
+              <div class="cond-title">보상조건</div>
+              1. 안심결제로 거래<br>
+              2. 구매 확정을 완료<br>
+              3. 정상 상품 (거래 제한 상품 X)
+            </div>
+          </div>
+          <div class="scam-tip-footer">${timeStr} 나에게만 보이는 메시지예요.</div>
+        </div>
+      `;
+
+      ml.insertAdjacentHTML('beforeend', cardHTML);
+      ca.scrollTop = ca.scrollHeight;
+    }
+
     // 뒤로가기 초기화
     function resetAll() {
       ml.innerHTML = '';
@@ -880,6 +1546,12 @@
       sBtn.classList.remove('active');
       isSending = false;
       bannerShrunk = false;
+      featureTrayOpen = false;
+      profileOpen = false;
+      document.getElementById('profileOverlay').classList.remove('open');
+      document.getElementById('trustSheetOverlay').classList.remove('open');
+      document.getElementById('featureTray').classList.remove('open');
+      document.getElementById('plusIcon').classList.remove('rotated', 'unrotated');
       document.getElementById('quickChips').style.display = 'flex';
       document.getElementById('trustBanner').classList.remove('shrunk', 'expanded');
       document.getElementById('trustBanner').style.display = '';
